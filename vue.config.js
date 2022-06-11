@@ -62,12 +62,13 @@ const devServer = Object.assign(
     }),
   { 
     hot: devServerConfig.hmr,
-    watchOptions: {
-      ignored: [/node_modules/, /public/],
+    static: {
+        watch: {
+            ignored: [/node_modules/, /public/]
+        }
     },
   }
 )
-
 module.exports = {
   publicPath: `/${publicPath}`,
   pages,
@@ -78,10 +79,18 @@ module.exports = {
       new WebpackAssetsManifest({
         integrity: false,
         entrypoints: true,
-        writeToDisk: true,
+        //writeToDisk: true,
         publicPath: `/${publicPath}/`
       })
-    ]
+    ],
+    resolve: {
+        alias: {
+          '@': path.join(__dirname, 'app/fronted/src')
+        }
+      },
+    entry: {
+        app: path.join(__dirname, 'app/frontend/src', 'main.js')
+    }
   },
   chainWebpack: config => {
     // Modify the options for the CopyWebpackPlugin.
@@ -92,7 +101,7 @@ module.exports = {
     //  into a nested directory. Instead, we use the "public" directory of our
     //  VueCLI application, which is 'app/frontend/public'
     config.plugin('copy').tap(([options]) => {
-      options[0].from = path.resolve(__dirname, 'app/frontend/public')
+      options['patterns'].from = path.resolve(__dirname, 'app/frontend/public')
       return [options]
     })
   }
