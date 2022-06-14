@@ -12,7 +12,7 @@
     </div>
     <button class="button is-primary is-light" v-on:click="thankyou">送出</button>
   </div>
-  <Foot v-bind:author="name" />
+  <Foot v-bind:author="name" v-on:emitPractice="eP"/>
 
 </template>
 
@@ -29,6 +29,9 @@ export default {
   methods: {
     thankyou () {
       alert(`${this.name}, alert success!`)
+    },
+    eP () {
+      console.log('receive child component emit')
     }
   },
   components: {

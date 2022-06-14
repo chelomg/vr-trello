@@ -1,6 +1,7 @@
 <template>
     <div class="footer">
         <div class="footer-content"> {{ trademark }}</div>
+        <button class="btn" @click="clickForEmitPractice"> emit 練習</button>
     </div>
 </template>
 
@@ -16,6 +17,11 @@ export default {
   computed: {
     trademark () {
       return this.trademarkPrefix + ' ' + this.author + ' !'
+    }
+  },
+  methods: {
+    clickForEmitPractice () {
+      this.$emit('emitPractice')
     }
   }
 }
