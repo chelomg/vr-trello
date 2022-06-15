@@ -1,46 +1,39 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-
-  <Foot v-bind:author="name" v-on:emitPractice="eP"/>
+  <div class="main-counter">
+    <p>Root component: Vue Counter</p>
+    <p class="display-count"> {{ counterCount }}</p>
+    <p>
+      <button class="counter-button" @click="increaseCounter">+</button>
+      <button class="counter-button" @click="decreaseCounter">-</button>
+    </p>
+  </div>
+  <Counter />
+  <Foot v-bind:author="authorName"/>
 
 </template>
 
 <script>
 import Foot from './components/Foot.vue'
-import Todos from './components/Todos.vue'
-import Receiver from './components/Receiver.vue'
-import Sender from './components/Sender.vue'
+import Counter from './components/Counter.vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'App',
   data: function () {
     return {
-      name: '',
-      todos: []
+      authorName: 'chelong'
     }
   },
+  computed: {
+    ...mapGetters(['counterCount'])
+  },
   methods: {
-    thankyou () {
-      alert(`${this.name}, alert success!`)
-    },
-    eP () {
-      console.log('receive child component emit')
-    },
-    addTodo (todo) {
-      this.todos.push(todo)
-    },
-    deleteTodo (todo) {
-      const todoIndex = this.todos.indexOf(todo)
-      if (todoIndex >= 0) {
-        this.todos.splice(todoIndex, 1)
-      }
-    }
+    ...mapActions(['increaseCounter', 'decreaseCounter'])
   },
   components: {
     Foot,
-    Todos,
-    Sender,
-    Receiver
+    Counter
   }
 }
 </script>
