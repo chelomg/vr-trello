@@ -1,25 +1,6 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
-  <Sender />
-  <Receiver />
-  <div class="content-form">
-    <div class="field is-horizontal">
-      <div class="field-body">
-        <div class="field">
-          <p class="control">
-            <input class="input" type="text" placeholder="你的暱稱" v-bind:nickname="name" v-model="name">
-          </p>
-        </div>
-      </div>
-    </div>
-    <button class="button is-primary is-light" v-on:click="thankyou">送出</button>
-  </div>
-  <Todos @addtodo="addTodo"/>
-  <ul class="todo-item">
-    <li v-for="todo in todos" :key="todo" @click="deleteTodo(todo)">
-      <i class="far fa-calendar-check"> {{ todo }} </i>
-    </li>
-  </ul>
+
   <Foot v-bind:author="name" v-on:emitPractice="eP"/>
 
 </template>
