@@ -12,18 +12,26 @@
     </div>
     <button class="button is-primary is-light" v-on:click="thankyou">送出</button>
   </div>
+  <Todos @addtodo="addTodo"/>
+  <ul class="todo-item">
+    <li v-for="todo in todos" :key="todo" @click="deleteTodo(todo)">
+      <i class="far fa-calendar-check"> {{ todo }} </i>
+    </li>
+  </ul>
   <Foot v-bind:author="name" v-on:emitPractice="eP"/>
 
 </template>
 
 <script>
 import Foot from './components/Foot.vue'
+import Todos from './components/Todos.vue'
 
 export default {
   name: 'App',
   data: function () {
     return {
-      name: ''
+      name: '',
+      todos: []
     }
   },
   methods: {
@@ -32,10 +40,19 @@ export default {
     },
     eP () {
       console.log('receive child component emit')
+    },
+    addTodo (todo) {
+      this.todos.push(todo)
+    },
+    deleteTodo (todo) {
+      const todoIndex = this.todos.indexOf(todo)
+      if (todoIndex >= 0) {
+        this.todos.splice(todoIndex, 1)
+      }
     }
   },
   components: {
-    Foot
+    Foot, Todos
   }
 }
 </script>
