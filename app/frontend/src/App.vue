@@ -1,5 +1,7 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
+  <Sender />
+  <Receiver />
   <div class="content-form">
     <div class="field is-horizontal">
       <div class="field-body">
@@ -25,6 +27,8 @@
 <script>
 import Foot from './components/Foot.vue'
 import Todos from './components/Todos.vue'
+import Receiver from './components/Receiver.vue'
+import Sender from './components/Sender.vue'
 
 export default {
   name: 'App',
@@ -52,7 +56,10 @@ export default {
     }
   },
   components: {
-    Foot, Todos
+    Foot,
+    Todos,
+    Sender,
+    Receiver
   }
 }
 </script>
