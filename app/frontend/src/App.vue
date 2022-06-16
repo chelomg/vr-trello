@@ -1,4 +1,17 @@
 <template>
+  <nav class="bg-teal-700 text-blue-100">
+    <div class="font-thin flex justify-between item-center">
+      <a href="/">
+        <i class="fas fa-columns">
+        </i>
+        tailwindcss testing 看板
+      </a>
+      <div>
+        <input type="button" class="user-button" value="登入">
+        <input type="button" class="user-button" value="註冊">
+      </div>
+    </div>
+  </nav>
   <img alt="Vue logo" src="./assets/logo.png">
   <div class="main-avatar" v-for="s in subscribers" :key="s">
     <img class="avatar" :src="s.url">
@@ -13,7 +26,7 @@
     </p>
   </div>
   <Counter />
-  <Foot v-bind:author="authorName"/>
+  <Foot v-bind:author="authorName" />
 
 </template>
 
