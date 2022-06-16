@@ -1,5 +1,9 @@
 <template>
   <img alt="Vue logo" src="./assets/logo.png">
+  <div class="main-avatar" v-for="s in subscribers" :key="s">
+    <img class="avatar" :src="s.url">
+  </div>
+  <br>
   <div class="main-counter">
     <p>Root component: Vue Counter</p>
     <p class="display-count"> {{ counterCount }}</p>
@@ -17,12 +21,16 @@
 import Foot from './components/Foot.vue'
 import Counter from './components/Counter.vue'
 import { mapGetters, mapActions } from 'vuex'
+import axios from 'axios'
 
+const cors = 'https://cors-anywhere.herokuapp.com/'
+const apiUrl = 'https://tinyfac.es/api/users'
 export default {
   name: 'App',
   data: function () {
     return {
-      authorName: 'chelong'
+      authorName: 'chelong',
+      subscribers: []
     }
   },
   computed: {
@@ -34,6 +42,12 @@ export default {
   components: {
     Foot,
     Counter
+  },
+  mounted () {
+    axios.get(`${cors}${apiUrl}`)
+      .then((response) => {
+        this.subscribers = response.data
+      })
   }
 }
 </script>
@@ -46,5 +60,17 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.avatar{
+  float: left;
+  margin-top: 1em;
+  margin-right: 1em;
+  position: relative;
+  height: 50px;
+  width: 50px;
+
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  border-radius: 50%;
 }
 </style>
