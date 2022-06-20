@@ -7,15 +7,22 @@
         vr-trello
       </a>
       <div>
-        <input type="button" class="user-button" value="登入">
-        <input type="button" class="user-button" value="註冊">
+        <input v-if="!isLogin" type="button" class="user-button" value="登入">
+        <input v-if="!isLogin" type="button" class="user-button" value="註冊">
+        <input v-if="isLogin" @click="signout" type="button" class="user-button" value="登出">
       </div>
     </div>
   </nav>
 </template>
 <script>
-
+import { mapGetters, mapActions } from 'vuex'
 export default {
+  computed: {
+    ...mapGetters(['isLogin'])
+  },
+  methods: {
+    ...mapActions(['signout'])
+  }
 }
 </script>
 <style scoped>

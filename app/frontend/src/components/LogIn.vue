@@ -1,126 +1,82 @@
 <template>
-  <div id='login'>
-    <h3>VR-Trello Login</h3>
-    <div v-if="client === ''">
-      <div>
-        <h1>SignUp</h1>
-        <label for='email'>email</label>
-        <input id='signup-email' type='email' v-model='email' />
-        <label for='password'>password</label>
-        <input id='signup-password' type='password' v-model='password' />
-        <label for='password'>password comfirmation</label>
-        <input id='signup-password-comfirmation' type='password' v-model='passwordComfirmation' />
-        <button @click='signup'>新規登録</button>
-      </div>
-      <div>
-        <h1>SignIn</h1>
-        <label for='email'>email</label>
-        <input id='signin-email' type='email' v-model='email' />
-        <label for='password'>password</label>
-        <input id='signin-password' type='password' v-model='password' />
-        <label for='password'>password comfirmation</label>
-        <input id='signin-password-comfirmation' type='password' v-model='passwordComfirmation' />
-        <button @click='signin'>SignIn</button>
+  <section class="h-screen">
+    <div class="px-6 h-full text-gray-800">
+      <div class="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap g-6">
+        <div class="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
+          <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="w-full"
+            alt="Sample image" />
+        </div>
+        <div class="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
+          <form>
+
+            <!-- Email input -->
+            <div class="mb-6">
+              <input type="email"
+                class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                id="user-email" placeholder="Email address" v-model="email"/>
+            </div>
+
+            <!-- Password input -->
+            <div class="mb-6">
+              <input type="password"
+                class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                id="user-password" placeholder="Password" v-model="password" />
+            </div>
+
+            <div class="text-center lg:text-left">
+              <button type="button"
+                @click='userSignin'
+                class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
+                Login
+              </button>
+              <p class="text-sm font-semibold mt-2 pt-1 mb-0">
+                Don't have an account?
+                <a href="#!"
+                  class="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out">Register</a>
+              </p>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-    <div v-if="client !== ''">
-      <div>
-        <button @click="signout">SignOut</button>
-      </div>
-    </div>
-  </div>
+  </section>
 </template>
 
 <script>
-import axios from 'axios'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'LogIn',
   data: function () {
     return {
-      name: '',
       email: '',
       password: '',
-      passwordComfirmation: '',
-      uid: '',
-      access_token: '',
-      client: '',
-      title: '',
-      content: '',
-      tasks: [],
-      comment: '',
-      posts: []
+      passwordComfimation: ''
+    }
+  },
+  computed: {
+    ...mapGetters(['isLogin']),
+    userData () {
+      return {
+        email: this.email,
+        password: this.password,
+        passwordComfimation: this.passwordComfimation
+      }
     }
   },
   methods: {
-    signup () {
-      axios
-        .post('http://localhost:3000/v1/auth', {
-          email: this.email,
-          password: this.password,
-          password_comfirmation: this.password
-        })
-        .then((response) => {
-          localStorage.setItem(
-            'access-token',
-            response.headers['access-token']
-          )
-          localStorage.setItem('client', response.headers.client)
-          localStorage.setItem('uid', response.headers.uid)
-          this.access_token = response.headers['access-token']
-          this.client = response.headers.client
-          this.uid = response.headers.uid
-        })
-      this.email = ''
+    ...mapActions(['signup', 'signin']),
+    userSignup () {
+      this.signup(this.userData)
+      this.removeUserData()
+    },
+    userSignin () {
+      this.signin(this.userData)
+      this.removeUserData()
+    },
+    removeUserData () {
       this.password = ''
       this.passwordComfirmation = ''
-    },
-    signin () {
-      console.log(this.email)
-      console.log(this.password)
-      axios
-        .post('http://localhost:3000/v1/auth/sign_in', {
-          email: this.email,
-          password: this.password,
-          password_confirmation: this.password
-        })
-        .then((response) => {
-          console.log(response)
-          localStorage.setItem(
-            'access-token',
-            response.headers['access-token']
-          )
-          localStorage.setItem('client', response.headers.client)
-          localStorage.setItem('uid', response.headers.uid)
-          this.access_token = response.headers['access-token']
-          this.client = response.headers.client
-          this.uid = response.headers.uid
-        })
       this.email = ''
-      this.password = ''
-      this.passwordComfirmation = ''
-    },
-    signout () {
-      console.log(this.uid)
-      console.log(this.access_token)
-      console.log(this.client)
-      axios
-        .delete('http://localhost:3000/v1/auth/sign_out', {
-          test: { test: 'test' },
-          headers: {
-            uid: this.uid,
-            'access-token': this.access_token,
-            client: this.client
-          }
-        })
-        .then((response) => {
-          console.log(response)
-          this.access_token = ''
-          this.client = ''
-          this.uid = ''
-          localStorage.removeItem('uid')
-          localStorage.removeItem('access-token')
-          localStorage.removeItem('client')
-        })
     }
   }
 }
@@ -134,4 +90,5 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
 </style>
