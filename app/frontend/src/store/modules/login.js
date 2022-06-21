@@ -18,7 +18,10 @@ const getters = {
     return state.isLogin
   },
   signinPage: (state) => (state.signinPage),
-  userEmail: (state) => (state.uid)
+  userEmail (state) {
+    state.uid = localStorage.getItem('uid')
+    return state.uid
+  }
 }
 
 const actions = {
