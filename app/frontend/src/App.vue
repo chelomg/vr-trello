@@ -1,8 +1,7 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
   <NavBar />
-  <LogIn />
-  <div v-if="isLogin">
+  <LogIn v-if="!isLogin" />
+  <div v-if="isBlock">
     <div class="main-avatar" v-for="s in subscribers" :key="s">
       <img class="avatar" :src="s.url">
     </div>
@@ -36,11 +35,11 @@ export default {
     return {
       authorName: 'chelong',
       subscribers: [],
-      isLogin: false
+      isBlock: false
     }
   },
   computed: {
-    ...mapGetters(['counterCount'])
+    ...mapGetters(['counterCount', 'isLogin'])
   },
   methods: {
     ...mapActions(['increaseCounter', 'decreaseCounter'])

@@ -7,11 +7,18 @@ const state = {
   passwordComfirmation: '',
   uid: '',
   access_token: '',
-  client: ''
+  client: '',
+  isLogin: false,
+  signinPage: true
 }
 
 const getters = {
-  isLogin: (state) => (localStorage.getItem('access-token') !== null)
+  isLogin (state) {
+    state.isLogin = (localStorage.getItem('uid') !== null)
+    return state.isLogin
+  },
+  signinPage: (state) => (state.signinPage),
+  userEmail: (state) => (state.uid)
 }
 
 const actions = {
@@ -35,12 +42,15 @@ const actions = {
     const response = await axios.delete(apiUrl + '/sign_out', {
       test: { test: 'test' },
       headers: {
-        uid: state.uid,
-        'access-token': state.access_token,
-        client: state.client
+        uid: localStorage.getItem('uid'),
+        'access-token': localStorage.getItem('access-token'),
+        client: localStorage.getItem('client')
       }
     })
     commit('deleteLoginData', response)
+  },
+  async jumpSigninPage ({ commit }, data) {
+    commit('setPageStatus', data)
   }
 }
 
@@ -55,6 +65,7 @@ const mutations = {
     state.access_token = data.headers['access-token']
     state.client = data.headers.client
     state.uid = data.headers.uid
+    state.isLogin = true
   },
   deleteLoginData: (state) => {
     state.access_token = ''
@@ -63,6 +74,10 @@ const mutations = {
     localStorage.removeItem('uid')
     localStorage.removeItem('access-token')
     localStorage.removeItem('client')
+    state.isLogin = false
+  },
+  setPageStatus: (state, data) => {
+    state.signinPage = data
   }
 }
 
