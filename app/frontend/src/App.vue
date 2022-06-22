@@ -1,5 +1,4 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
   <NavBar />
   <section>
     <router-view></router-view>
@@ -44,18 +43,7 @@ export default {
     ...mapGetters(['counterCount', 'isLogin'])
   },
   methods: {
-    ...mapActions(['increaseCounter', 'decreaseCounter']),
-    fetchBoards () {
-      axios.get('http://localhost:3000/boards', {
-        headers: {
-          uid: localStorage.getItem('uid'),
-          'access-token': localStorage.getItem('access-token'),
-          client: localStorage.getItem('client')
-        }
-      }).then((response) => {
-        console.log(response)
-      })
-    }
+    ...mapActions(['increaseCounter', 'decreaseCounter'])
   },
   components: {
     Foot,
@@ -67,7 +55,6 @@ export default {
       .then((response) => {
         this.subscribers = response.data
       })
-    this.fetchBoards()
   }
 }
 </script>

@@ -1,4 +1,4 @@
-class BoardsController < ApplicationController
+class Api::V1::BoardsController < ApplicationController
   before_action :authenticate_api_v1_user!
   before_action :set_board, only: %i[ show edit update destroy ]
 

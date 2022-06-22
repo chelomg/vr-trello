@@ -1,18 +1,59 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
+    <div v-for="board in boards" :key="board.id">
+      <div class="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
+        <h5 class="text-gray-900 text-xl leading-tight font-medium mb-2">{{ board.name }}</h5>
+        <p class="text-gray-700 text-base mb-4">
+          {{ board.description }}
+        </p>
+        <a href="/" type="button"
+          class=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">See
+          More</a>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from '../components/HelloWorld.vue'
+import { mapGetters } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'HomeView',
-  components: {
-    HelloWorld
+  data: function () {
+    return {
+      boards: []
+    }
+  },
+  computed: {
+    ...mapGetters(['isLogin'])
+  },
+  methods: {
+    fetchBoards () {
+      axios.get('http://localhost:3000/api/v1/boards', {
+        headers: {
+          uid: localStorage.getItem('uid'),
+          'access-token': localStorage.getItem('access-token'),
+          client: localStorage.getItem('client')
+        }
+      }).then((response) => {
+        if (response.data.message === 'ok') {
+          this.boards.push(response.data.boards[0])
+          this.boards.push(response.data.boards[0])
+          this.boards.push(response.data.boards[0])
+          this.boards.push(response.data.boards[0])
+          this.boards.push(response.data.boards[0])
+          this.boards.push(response.data.boards[0])
+          this.boards.push(response.data.boards[0])
+          this.boards.push(response.data.boards[0])
+        }
+      })
+    }
+  },
+  created () {
+    if (this.isLogin) {
+      this.fetchBoards()
+    }
   }
 }
 </script>
