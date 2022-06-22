@@ -8,8 +8,7 @@ const state = {
   uid: '',
   access_token: '',
   client: '',
-  isLogin: false,
-  signinPage: true
+  isLogin: false
 }
 
 const getters = {
@@ -17,7 +16,6 @@ const getters = {
     state.isLogin = (localStorage.getItem('uid') !== null)
     return state.isLogin
   },
-  signinPage: (state) => (state.signinPage),
   userEmail (state) {
     state.uid = localStorage.getItem('uid')
     return state.uid
@@ -51,9 +49,6 @@ const actions = {
       }
     })
     commit('deleteLoginData', response)
-  },
-  async jumpSigninPage ({ commit }, data) {
-    commit('setPageStatus', data)
   }
 }
 
@@ -78,9 +73,6 @@ const mutations = {
     localStorage.removeItem('access-token')
     localStorage.removeItem('client')
     state.isLogin = false
-  },
-  setPageStatus: (state, data) => {
-    state.signinPage = data
   }
 }
 

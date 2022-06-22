@@ -1,6 +1,9 @@
 <template>
+  <img alt="Vue logo" src="./assets/logo.png">
   <NavBar />
-  <LogIn v-if="!isLogin" />
+  <section>
+    <router-view></router-view>
+  </section>
   <div v-if="isBlock">
     <div class="main-avatar" v-for="s in subscribers" :key="s">
       <img class="avatar" :src="s.url">
@@ -23,7 +26,6 @@
 import NavBar from './components/NavBar.vue'
 import Foot from './components/Foot.vue'
 import Counter from './components/Counter.vue'
-import LogIn from './components/LogIn.vue'
 import { mapGetters, mapActions } from 'vuex'
 import axios from 'axios'
 
@@ -42,12 +44,22 @@ export default {
     ...mapGetters(['counterCount', 'isLogin'])
   },
   methods: {
-    ...mapActions(['increaseCounter', 'decreaseCounter'])
+    ...mapActions(['increaseCounter', 'decreaseCounter']),
+    fetchBoards () {
+      axios.get('http://localhost:3000/boards', {
+        headers: {
+          uid: localStorage.getItem('uid'),
+          'access-token': localStorage.getItem('access-token'),
+          client: localStorage.getItem('client')
+        }
+      }).then((response) => {
+        console.log(response)
+      })
+    }
   },
   components: {
     Foot,
     Counter,
-    LogIn,
     NavBar
   },
   mounted () {
@@ -55,6 +67,7 @@ export default {
       .then((response) => {
         this.subscribers = response.data
       })
+    this.fetchBoards()
   }
 }
 </script>

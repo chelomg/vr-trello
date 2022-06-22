@@ -23,14 +23,7 @@
                 id="user-password" placeholder="Password" v-model="password" />
             </div>
 
-            <!-- Password Comfirmation input -->
-            <div v-if="!signinPage" class="mb-6">
-              <input type="password"
-                class="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                id="user-password-comfirmation" placeholder="Password Comfirmation" v-model="passwordComfimation" />
-            </div>
-
-            <div v-if="signinPage" class="text-center lg:text-left">
+            <div class="text-center lg:text-left">
               <button type="button"
                 @click='userSignin'
                 class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
@@ -42,13 +35,6 @@
                   @click='jumpToSignup'
                   class="text-red-600 hover:text-red-700 focus:text-red-700 transition duration-200 ease-in-out">Register</a>
               </p>
-            </div>
-            <div v-else class="text-center lg:text-left">
-              <button type="button"
-                @click='userSignup'
-                class="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">
-                Signup
-              </button>
             </div>
           </form>
         </div>
@@ -69,7 +55,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['isLogin', 'signinPage']),
+    ...mapGetters(['isLogin']),
     userData () {
       return {
         email: this.email,
@@ -79,14 +65,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['signup', 'signin', 'jumpSigninPage']),
-    userSignup () {
-      this.signup(this.userData)
-      this.removeUserData()
-    },
+    ...mapActions(['signin']),
     userSignin () {
       this.signin(this.userData)
       this.removeUserData()
+      // this.$router.push({ path: '/' })
     },
     removeUserData () {
       this.password = ''
@@ -95,19 +78,21 @@ export default {
     },
     jumpToSignup ($event) {
       $event.preventDefault()
-      this.jumpSigninPage(false)
+      this.$router.push({ path: '/signup' })
+    }
+  },
+  created () {
+    if (this.isLogin) {
+      this.$router.push({ path: '/' })
+    }
+  },
+  watch: {
+    isLogin: async function (val) {
+      this.$router.push({ path: '/' })
     }
   }
 }
 </script>
 <style scoped>
-#login {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 
 </style>

@@ -5,8 +5,8 @@
         vr-trello
       </a>
       <div>
-        <input v-if="!isLogin && !signinPage" @click="jumpSigninPage(true)" type="button" class="user-button" value="登入">
-        <input v-if="!isLogin && signinPage"  @click="jumpSigninPage(false)" type="button" class="user-button" value="註冊">
+        <a v-if="!isLogin" href="/login" type="button" class="user-button">登入</a>
+        <a v-if="!isLogin" href="/signup" type="button" class="user-button">註冊</a>
         <p v-if="isLogin"> {{ userEmail }} </p>
         <input v-if="isLogin" @click="signout" type="button" class="user-button" value="登出">
       </div>
@@ -17,10 +17,10 @@
 import { mapGetters, mapActions } from 'vuex'
 export default {
   computed: {
-    ...mapGetters(['isLogin', 'signinPage', 'userEmail'])
+    ...mapGetters(['isLogin', 'userEmail'])
   },
   methods: {
-    ...mapActions(['signout', 'jumpSigninPage'])
+    ...mapActions(['signout'])
   }
 }
 </script>
