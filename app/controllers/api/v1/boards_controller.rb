@@ -24,16 +24,11 @@ class Api::V1::BoardsController < ApplicationController
 
   # POST /boards or /boards.json
   def create
-    @board = current_user.Board.new(board_params)
-
-    respond_to do |format|
-      if @board.save
-        format.html { redirect_to board_url(@board), notice: "Board was successfully created." }
-        format.json { render :show, status: :created, location: @board }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @board.errors, status: :unprocessable_entity }
-      end
+    @board = Board.new(name: board_params[:name], description: board_params[:description], user_id: current_api_v1_user.id)
+    if @board.save
+      render json: @board, status: :created, location: api_v1_boards_path(@board)
+    else
+      render json: @board.errors, status: :unprocessable_entity
     end
   end
 
@@ -55,7 +50,7 @@ class Api::V1::BoardsController < ApplicationController
     @board.destroy
 
     respond_to do |format|
-      format.html { redirect_to boards_url, notice: "Board was successfully destroyed." }
+      # format.html { redirect_to boards_url, notice: "Board was successfully destroyed." }
       format.json { head :no_content }
     end
   end
