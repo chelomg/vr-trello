@@ -88,7 +88,9 @@ export default {
   },
   watch: {
     isLogin: async function (val) {
-      this.$router.push({ path: '/' })
+      if (val) {
+        this.$router.push({ path: '/' })
+      }
     }
   }
 }

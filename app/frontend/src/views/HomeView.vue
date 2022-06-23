@@ -86,6 +86,13 @@ export default {
     if (this.isLogin) {
       this.fetchBoards()
     }
+  },
+  watch: {
+    isLogin: async function (val) {
+      if (val === false) {
+        this.$router.push({ path: '/login' })
+      }
+    }
   }
 }
 </script>
