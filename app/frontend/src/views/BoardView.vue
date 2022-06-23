@@ -2,23 +2,21 @@
   <div class="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-5">
     <div class="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
       <form @submit="onSubmit">
-        <h5 class="text-gray-900 text-xl leading-tight font-medium mb-2">Add Board</h5>
-        <input type="text" class="text-gray-700 text-base mb-4" v-model="name" placeholder="type board name ... " />
-        <input type="text" class="text-gray-700 text-base mb-4" v-model="description" placeholder="type board description ... " />
-        <input type="submit" value="Create New Board"
+        <h5 class="text-gray-900 text-xl leading-tight font-medium mb-2">Add List</h5>
+        <input type="text" class="text-gray-700 text-base mb-4" v-model="name" placeholder="type list name ... " />
+        <input type="submit" value="Create New List"
           class=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"/>
       </form>
     </div>
-    <div v-for="board in boards" :key="board.id">
+    <div v-for="list in lists" :key="list.id">
       <div class="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
-        <i @click="deleteBoard(board.id)" class="flex flex-row-reverse">X</i>
-        <h5 class="text-gray-900 text-xl leading-tight font-medium mb-2">{{ board.name }}</h5>
+        <i @click="deleteList(list.id)" class="flex flex-row-reverse">X</i>
+        <h5 class="text-gray-900 text-xl leading-tight font-medium mb-2">{{ list.name }}</h5>
         <p class="text-gray-700 text-base mb-4">
-          {{ board.description }}
+          {{ list.description }}
         </p>
-        <a :href="'/boards/'+board.id" type="button"
-          class=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">See
-          More</a>
+        <a :href="'/lists/'+list.id+'/lists'" type="button"
+          class=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Create New Card</a>
       </div>
     </div>
   </div>
@@ -27,22 +25,21 @@
 <script>
 import { mapGetters } from 'vuex'
 import axios from 'axios'
-const apiUrl = 'http://localhost:3000/api/v1/boards'
+const apiUrl = 'http://localhost:3000/api/v1/boards/6/lists'
 
 export default {
   name: 'HomeView',
   data: function () {
     return {
-      boards: [],
-      name: '',
-      description: ''
+      lists: [],
+      name: ''
     }
   },
   computed: {
     ...mapGetters(['isLogin'])
   },
   methods: {
-    fetchBoards () {
+    fetchlists () {
       axios.get(apiUrl, {
         headers: {
           uid: localStorage.getItem('uid'),
@@ -51,8 +48,8 @@ export default {
         }
       }).then((response) => {
         if (response.data.message === 'ok') {
-          // this.boards.push(response.data.boards[0])
-          this.boards = response.data.boards
+          // this.lists.push(response.data.lists[0])
+          this.lists = response.data.lists
         }
       })
     },
@@ -62,16 +59,14 @@ export default {
         uid: localStorage.getItem('uid'),
         'access-token': localStorage.getItem('access-token'),
         client: localStorage.getItem('client'),
-        name: this.name,
-        description: this.description
+        name: this.name
       }).then((response) => {
-        const board = response.data
-        this.boards.unshift(board)
+        const list = response.data
+        this.lists.unshift(list)
       })
       this.name = ''
-      this.description = ''
     },
-    deleteBoard (id) {
+    deletelist (id) {
       axios.delete(apiUrl + `/${id}`, {
         headers: {
           uid: localStorage.getItem('uid'),
@@ -79,12 +74,12 @@ export default {
           client: localStorage.getItem('client')
         }
       })
-      this.boards = this.boards.filter((board) => board.id !== id)
+      this.lists = this.lists.filter((list) => list.id !== id)
     }
   },
   created () {
     if (this.isLogin) {
-      this.fetchBoards()
+      this.fetchlists()
     }
   },
   watch: {
