@@ -1,5 +1,5 @@
 class Board < ApplicationRecord
-  has_many :lists, dependent: :destroy
+  has_many :lists, -> { order(position: :asc) }, dependent: :destroy
   belongs_to :user
   validates :name, presence: true
 
