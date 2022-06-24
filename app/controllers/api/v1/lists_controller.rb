@@ -5,8 +5,8 @@ class Api::V1::ListsController < ApplicationController
   # GET /lists or /lists.json
   def index
     board = Board.find(params[:board_id])
-    @lists = board.lists
-    render json: { message: 'ok', lists: @lists, board_id: params[:board_id] }
+    lists_json = board.lists_json
+    render json: { message: 'ok', lists: lists_json, board_id: params[:board_id] }
   end
 
   # GET /lists/1 or /lists/1.json

@@ -51,7 +51,6 @@ export default {
         }
       }).then((response) => {
         if (response.data.message === 'ok') {
-          // this.boards.push(response.data.boards[0])
           this.boards = response.data.boards
         }
       })

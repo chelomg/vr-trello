@@ -51,6 +51,7 @@ export default {
           client: localStorage.getItem('client')
         }
       }).then((response) => {
+        console.log(response.data)
         if (response.data.message === 'ok') {
           this.lists = response.data.lists
         }
@@ -82,7 +83,7 @@ export default {
   },
   created () {
     if (this.isLogin) {
-      this.apiUrl = apiUrlPrefix + `${this.boardId}/lists`
+      this.apiUrl = apiUrlPrefix + `${this.boardId}/lists.json`
       this.fetchlists()
     }
   },
@@ -93,7 +94,7 @@ export default {
       }
     },
     boardId: async function (val) {
-      this.apiUrl = apiUrlPrefix + `${val}/lists`
+      this.apiUrl = apiUrlPrefix + `${val}/lists.json`
     }
   }
 }
