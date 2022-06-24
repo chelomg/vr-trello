@@ -25,22 +25,26 @@
 <script>
 import { mapGetters } from 'vuex'
 import axios from 'axios'
-const apiUrl = 'http://localhost:3000/api/v1/boards/6/lists'
+const apiUrlPrefix = 'http://localhost:3000/api/v1/boards/'
 
 export default {
   name: 'HomeView',
   data: function () {
     return {
       lists: [],
-      name: ''
+      name: '',
+      apiUrl: ''
     }
   },
   computed: {
-    ...mapGetters(['isLogin'])
+    ...mapGetters(['isLogin']),
+    boardId () {
+      return this.$route.params.boardId
+    }
   },
   methods: {
     fetchlists () {
-      axios.get(apiUrl, {
+      axios.get(this.apiUrl, {
         headers: {
           uid: localStorage.getItem('uid'),
           'access-token': localStorage.getItem('access-token'),
@@ -48,14 +52,13 @@ export default {
         }
       }).then((response) => {
         if (response.data.message === 'ok') {
-          // this.lists.push(response.data.lists[0])
           this.lists = response.data.lists
         }
       })
     },
     onSubmit (event) {
       event.preventDefault()
-      axios.post(apiUrl, {
+      axios.post(this.apiUrl, {
         uid: localStorage.getItem('uid'),
         'access-token': localStorage.getItem('access-token'),
         client: localStorage.getItem('client'),
@@ -67,7 +70,7 @@ export default {
       this.name = ''
     },
     deletelist (id) {
-      axios.delete(apiUrl + `/${id}`, {
+      axios.delete(this.apiUrl + `/${id}`, {
         headers: {
           uid: localStorage.getItem('uid'),
           'access-token': localStorage.getItem('access-token'),
@@ -79,6 +82,7 @@ export default {
   },
   created () {
     if (this.isLogin) {
+      this.apiUrl = apiUrlPrefix + `${this.boardId}/lists`
       this.fetchlists()
     }
   },
@@ -87,6 +91,9 @@ export default {
       if (val === false) {
         this.$router.push({ path: '/login' })
       }
+    },
+    boardId: async function (val) {
+      this.apiUrl = apiUrlPrefix + `${val}/lists`
     }
   }
 }
