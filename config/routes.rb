@@ -9,6 +9,11 @@ Rails.application.routes.draw do
             put :drag
           end
         end
+        resources :cards, except: [:new, :edit] do
+          member do
+            put :drag
+          end
+        end
       end
     end
   end
