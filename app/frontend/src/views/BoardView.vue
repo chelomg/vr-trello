@@ -1,5 +1,5 @@
 <template>
-  <draggable v-model="lists" item-key="id"
+  <draggable v-model="lists" item-key="id" @change="this.dragList"
     class="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5">
 
     <template #item="{element}">
@@ -53,6 +53,20 @@ export default {
     }
   },
   methods: {
+    dragList (event) {
+      // eslint-disable-next-line
+      let data = new FormData()
+      data.append('list[position]', event.moved.newIndex + 1)
+      const url = apiUrlPrefix + `${this.boardId}/lists/${this.lists[event.moved.newIndex].id}/drag`
+      axios.put(url, {
+        uid: localStorage.getItem('uid'),
+        'access-token': localStorage.getItem('access-token'),
+        client: localStorage.getItem('client'),
+        position: event.moved.newIndex + 1
+      }).then((response) => {
+        console.log(response)
+      })
+    },
     fetchlists () {
       axios.get(this.apiUrl, {
         headers: {
@@ -93,7 +107,7 @@ export default {
   },
   created () {
     if (this.isLogin) {
-      this.apiUrl = apiUrlPrefix + `${this.boardId}/lists.json`
+      this.apiUrl = apiUrlPrefix + `${this.boardId}/lists`
       this.fetchlists()
     }
   },
@@ -104,7 +118,7 @@ export default {
       }
     },
     boardId: async function (val) {
-      this.apiUrl = apiUrlPrefix + `${val}/lists.json`
+      this.apiUrl = apiUrlPrefix + `${val}/lists`
     }
   }
 }
