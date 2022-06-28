@@ -28,85 +28,40 @@
 
 <script>
 import CardList from '../components/CardList.vue'
-import { mapGetters } from 'vuex'
-import axios from 'axios'
-const apiUrlPrefix = 'http://localhost:3000/api/v1/boards/'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'HomeView',
   data: function () {
     return {
-      lists: [],
       name: '',
-      apiUrl: ''
+      lists: []
     }
   },
   components: {
     CardList
   },
   computed: {
-    ...mapGetters(['isLogin']),
+    ...mapGetters(['isLogin', 'allLists']),
     boardId () {
       return this.$route.params.boardId
     }
   },
   methods: {
-    dragList (event) {
-      // eslint-disable-next-line
-      let data = new FormData()
-      data.append('list[position]', event.moved.newIndex + 1)
-      const url = apiUrlPrefix + `${this.boardId}/lists/${this.lists[event.moved.newIndex].id}/drag`
-      axios.put(url, {
-        uid: localStorage.getItem('uid'),
-        'access-token': localStorage.getItem('access-token'),
-        client: localStorage.getItem('client'),
-        position: event.moved.newIndex + 1
-      }).then((response) => {
-        console.log(response)
-      })
-    },
-    fetchlists () {
-      axios.get(this.apiUrl, {
-        headers: {
-          uid: localStorage.getItem('uid'),
-          'access-token': localStorage.getItem('access-token'),
-          client: localStorage.getItem('client')
-        }
-      }).then((response) => {
-        console.log(response.data)
-        if (response.data.message === 'ok') {
-          this.lists = response.data.lists
-        }
-      })
-    },
+    ...mapActions(['addList', 'fetchLists', 'initialBoardId', 'dragList', 'deleteList']),
     onSubmit (event) {
       event.preventDefault()
-      axios.post(this.apiUrl, {
-        uid: localStorage.getItem('uid'),
-        'access-token': localStorage.getItem('access-token'),
-        client: localStorage.getItem('client'),
-        name: this.name
-      }).then((response) => {
-        const list = response.data
-        this.lists.unshift(list)
-      })
+      if (this.name !== '') {
+        this.addList(this.name)
+      }
       this.name = ''
-    },
-    deletelist (id) {
-      axios.delete(this.apiUrl + `/${id}`, {
-        headers: {
-          uid: localStorage.getItem('uid'),
-          'access-token': localStorage.getItem('access-token'),
-          client: localStorage.getItem('client')
-        }
-      })
-      this.lists = this.lists.filter((list) => list.id !== id)
     }
   },
   created () {
     if (this.isLogin) {
-      this.apiUrl = apiUrlPrefix + `${this.boardId}/lists`
-      this.fetchlists()
+      this.initialBoardId(this.boardId)
+      this.fetchLists()
+      this.lists = this.allLists
     }
   },
   watch: {
@@ -116,7 +71,11 @@ export default {
       }
     },
     boardId: async function (val) {
-      this.apiUrl = apiUrlPrefix + `${val}/lists`
+      this.initialBoardId(val)
+      this.fetchLists()
+    },
+    allLists: async function (val) {
+      this.lists = val
     }
   }
 }
