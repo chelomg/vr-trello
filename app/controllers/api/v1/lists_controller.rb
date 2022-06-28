@@ -31,16 +31,12 @@ class Api::V1::ListsController < ApplicationController
 
   # POST /lists or /lists.json
   def create
-    @list = List.new(list_params)
+    @list = List.new(name: list_params[:name], board_id: params[:board_id])
 
-    respond_to do |format|
-      if @list.save
-        format.html { redirect_to list_url(@list), notice: "List was successfully created." }
-        format.json { render :show, status: :created, location: @list }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @list.errors, status: :unprocessable_entity }
-      end
+    if @list.save
+      render json: @list, status: :created, location: api_v1_board_lists_path(@list)
+    else
+      render json: @list.errors, status: :unprocessable_entity
     end
   end
 
@@ -61,10 +57,7 @@ class Api::V1::ListsController < ApplicationController
   def destroy
     @list.destroy
 
-    respond_to do |format|
-      format.html { redirect_to lists_url, notice: "List was successfully destroyed." }
-      format.json { head :no_content }
-    end
+    render json: {message: 'delete_ok'}
   end
 
   private
@@ -75,6 +68,6 @@ class Api::V1::ListsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def list_params
-      params.require(:list).permit(:name, :board_id, :position, :board_id)
+      params.require(:list).permit(:name, :board_id, :position)
     end
 end
