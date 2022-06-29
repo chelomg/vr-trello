@@ -85,6 +85,18 @@ const actions = {
         commit('setCardPosition', response)
       })
     }
+  },
+  async addCard ({ commit, state }, { listId, cardName }) {
+    const apiUrl = apiPrefix + `${state.boardId}/cards`
+    axios.post(apiUrl, {
+      uid: localStorage.getItem('uid'),
+      'access-token': localStorage.getItem('access-token'),
+      client: localStorage.getItem('client'),
+      list_id: listId,
+      name: cardName
+    }).then((response) => {
+      commit('newCard', response.data)
+    })
   }
 }
 
@@ -106,6 +118,14 @@ const mutations = {
   },
   setCardPosition: (response) => {
     console.log(response)
+  },
+  newCard: (state, card) => {
+    const index = state.lists.findIndex((list) => list.id === card.list_id)
+    if (index !== -1) {
+      const rawlistObj = JSON.parse(JSON.stringify(state.lists[index]))
+      rawlistObj.cards.push(card)
+      state.lists.splice(index, 1, rawlistObj)
+    }
   }
 }
 

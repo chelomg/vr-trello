@@ -9,6 +9,17 @@ class Api::V1::CardsController < ApplicationController
     render json: { message: 'ok', card: @card, board_id: params[:board_id]}
   end
 
+  # POST /cards
+  def create
+    @card = Card.new(name: card_params[:name], list_id: card_params[:list_id])
+  
+    if @card.save
+      render json: @card, status: :created, location: api_v1_board_lists_path(@card)
+    else
+      render json: @card.errors, status: :unprocessable_entity
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_card
