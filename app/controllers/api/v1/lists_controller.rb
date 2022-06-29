@@ -16,19 +16,6 @@ class Api::V1::ListsController < ApplicationController
     render json: { message: 'ok', list: @list, board_id: params[:board_id]}
   end
 
-  # GET /lists/1 or /lists/1.json
-  def show
-  end
-
-  # GET /lists/new
-  def new
-    @list = List.new
-  end
-
-  # GET /lists/1/edit
-  def edit
-  end
-
   # POST /lists or /lists.json
   def create
     @list = List.new(name: list_params[:name], board_id: params[:board_id])
@@ -37,19 +24,6 @@ class Api::V1::ListsController < ApplicationController
       render json: @list, status: :created, location: api_v1_board_lists_path(@list)
     else
       render json: @list.errors, status: :unprocessable_entity
-    end
-  end
-
-  # PATCH/PUT /lists/1 or /lists/1.json
-  def update
-    respond_to do |format|
-      if @list.update(list_params)
-        format.html { redirect_to list_url(@list), notice: "List was successfully updated." }
-        format.json { render :show, status: :ok, location: @list }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @list.errors, status: :unprocessable_entity }
-      end
     end
   end
 
