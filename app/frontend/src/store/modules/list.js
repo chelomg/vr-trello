@@ -97,6 +97,22 @@ const actions = {
     }).then((response) => {
       commit('newCard', response.data)
     })
+  },
+  async deleteCard ({ commit, state }, card) {
+    const id = card.id
+    const apiUrl = apiPrefix + `${state.boardId}/cards`
+    axios.delete(apiUrl + `/${id}`, {
+      headers: {
+        uid: localStorage.getItem('uid'),
+        'access-token': localStorage.getItem('access-token'),
+        client: localStorage.getItem('client')
+      }
+    }).then((response) => {
+      const listId = card.list_id
+      if (response.data.message === 'delete_ok') {
+        commit('removeCard', { listId, id })
+      }
+    })
   }
 }
 
@@ -124,6 +140,14 @@ const mutations = {
     if (index !== -1) {
       const rawlistObj = JSON.parse(JSON.stringify(state.lists[index]))
       rawlistObj.cards.push(card)
+      state.lists.splice(index, 1, rawlistObj)
+    }
+  },
+  removeCard: (state, { listId, id }) => {
+    const index = state.lists.findIndex((list) => list.id === listId)
+    if (index !== -1) {
+      const rawlistObj = JSON.parse(JSON.stringify(state.lists[index]))
+      rawlistObj.cards = rawlistObj.cards.filter((card) => card.id !== id)
       state.lists.splice(index, 1, rawlistObj)
     }
   }

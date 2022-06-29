@@ -1,6 +1,6 @@
 class Api::V1::CardsController < ApplicationController
   before_action :authenticate_api_v1_user!
-  before_action :set_card, only: %i[drag]
+  before_action :set_card, only: %i[destroy drag]
 
   # PUT /cards/:id/drag
   def drag
@@ -18,6 +18,13 @@ class Api::V1::CardsController < ApplicationController
     else
       render json: @card.errors, status: :unprocessable_entity
     end
+  end
+
+  # DELETE /cards/1
+  def destroy
+    @card.destroy
+
+    render json: { message: 'delete_ok' }
   end
 
   private
