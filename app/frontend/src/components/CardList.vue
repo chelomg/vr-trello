@@ -50,11 +50,6 @@ export default {
       }
       this.cardName = ''
     }
-  },
-  watch: {
-    list: async function (val) {
-      // this.cards = JSON.parse(JSON.stringify(val)).cards
-    }
   }
 }
 </script>
