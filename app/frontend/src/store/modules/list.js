@@ -35,7 +35,6 @@ const actions = {
       uid: localStorage.getItem('uid'),
       'access-token': localStorage.getItem('access-token'),
       client: localStorage.getItem('client'),
-      // eslint-disable-next-line
       name: listName
     }).then((response) => {
       commit('newList', response.data)
@@ -61,7 +60,6 @@ const actions = {
     } else {
       rawListsObj = state.lists
     }
-    console.log(position)
     const url = apiPrefix + `${state.boardId}/lists/${rawListsObj[position].id}/drag`
     axios.put(url, {
       uid: localStorage.getItem('uid'),
@@ -71,6 +69,22 @@ const actions = {
     })
 
     commit('setListPosition', position)
+  },
+  async dragCard ({ commit, state }, { event, listId }) {
+    const cardEvent = event.added || event.moved
+    if (cardEvent) {
+      const cardId = cardEvent.element.id
+      const url = apiPrefix + `${state.boardId}/cards/${cardId}/drag`
+      axios.put(url, {
+        uid: localStorage.getItem('uid'),
+        'access-token': localStorage.getItem('access-token'),
+        client: localStorage.getItem('client'),
+        list_id: listId,
+        position: cardEvent.newIndex + 1
+      }).then((response) => {
+        commit('setCardPosition', response)
+      })
+    }
   }
 }
 
@@ -89,6 +103,9 @@ const mutations = {
   },
   setListPosition: (idx) => {
     console.log(idx)
+  },
+  setCardPosition: (response) => {
+    console.log(response)
   }
 }
 
