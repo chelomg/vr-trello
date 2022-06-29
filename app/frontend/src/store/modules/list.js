@@ -149,6 +149,17 @@ const mutations = {
       state.lists.splice(index, 1, rawlistObj)
     }
   },
+  updateCards: (state, payload) => {
+    const listId = payload.listId
+    const cards = payload.cards
+    const index = state.lists.findIndex((list) => list.id === listId)
+    if (index !== -1) {
+      const rawlistObj = JSON.parse(JSON.stringify(state.lists[index]))
+      rawlistObj.cards = cards
+      console.log(rawlistObj)
+      state.lists.splice(index, 1, rawlistObj)
+    }
+  },
   removeCard: (state, { listId, id }) => {
     const index = state.lists.findIndex((list) => list.id === listId)
     if (index !== -1) {

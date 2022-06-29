@@ -18,8 +18,21 @@ export default {
   props: ['list'],
   data: function () {
     return {
-      cards: JSON.parse(JSON.stringify(this.list)).cards,
       cardName: ''
+    }
+  },
+  computed: {
+    cards: {
+      get () {
+        return JSON.parse(JSON.stringify(this.list)).cards
+      },
+      set (val) {
+        const payload = {
+          listId: this.list.id,
+          cards: val
+        }
+        this.$store.commit('updateCards', payload)
+      }
     }
   },
   methods: {
@@ -40,7 +53,7 @@ export default {
   },
   watch: {
     list: async function (val) {
-      this.cards = JSON.parse(JSON.stringify(val)).cards
+      // this.cards = JSON.parse(JSON.stringify(val)).cards
     }
   }
 }
