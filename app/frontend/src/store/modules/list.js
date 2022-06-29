@@ -53,7 +53,7 @@ const actions = {
     commit('removeList', id)
   },
   async dragList ({ commit, state }, event) {
-    const position = event.moved.oldIndex
+    const position = event.moved.newIndex
     let rawListsObj = null
     if (isProxy(state.lists)) {
       rawListsObj = toRaw(state.lists)
@@ -82,7 +82,10 @@ const actions = {
         list_id: listId,
         position: cardEvent.newIndex + 1
       }).then((response) => {
-        commit('setCardPosition', response)
+        if (response.data.message === 'ok') {
+          const card = response.data.card
+          commit('setCardPosition', card)
+        }
       })
     }
   },
@@ -125,6 +128,9 @@ const mutations = {
   },
   newList: (state, list) => {
     state.lists.push(list)
+  },
+  updateList: (state, list) => {
+    state.lists = list
   },
   removeList: (state, id) => {
     state.lists = state.lists.filter((list) => list.id !== id)

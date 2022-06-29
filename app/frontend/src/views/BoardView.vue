@@ -1,5 +1,5 @@
 <template>
-  <draggable v-model="lists" item-key="id" @change="this.dragList"
+  <draggable v-model="this.allLists" item-key="id" @change="this.dragList"
     class="p-10 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5">
 
     <template #item="{element}">
@@ -31,8 +31,7 @@ export default {
   name: 'HomeView',
   data: function () {
     return {
-      name: '',
-      lists: []
+      name: ''
     }
   },
   components: {
@@ -40,6 +39,14 @@ export default {
   },
   computed: {
     ...mapGetters(['isLogin', 'allLists']),
+    allLists: {
+      get () {
+        return this.$store.state.list.lists
+      },
+      set (val) {
+        this.$store.commit('updateList', val)
+      }
+    },
     boardId () {
       return this.$route.params.boardId
     }
@@ -58,7 +65,6 @@ export default {
     if (this.isLogin) {
       this.initialBoardId(this.boardId)
       this.fetchLists()
-      this.lists = this.allLists
     }
   },
   watch: {
@@ -70,9 +76,6 @@ export default {
     boardId: async function (val) {
       this.initialBoardId(val)
       this.fetchLists()
-    },
-    allLists: async function (val) {
-      this.lists = val
     }
   }
 }
