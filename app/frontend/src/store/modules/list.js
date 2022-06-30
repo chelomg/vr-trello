@@ -16,100 +16,66 @@ const actions = {
   async initialBoardId ({ commit }, id) {
     commit('setBoardId', id)
   },
-  async fetchLists ({ commit, state }) {
+  async fetchLists ({ commit, state, rootState }) {
     const apiUrl = apiPrefix + `${state.boardId}/lists`
     const response = await axios.get(apiUrl, {
-      headers: {
-        uid: localStorage.getItem('uid'),
-        'access-token': localStorage.getItem('access-token'),
-        client: localStorage.getItem('client')
-      }
+      headers: rootState.login.authHeader
     })
     if (response.data.message === 'ok') {
       commit('setLists', response.data.lists)
     }
   },
-  async addList ({ commit, state }, listName) {
+  async addList ({ commit, state, rootState }, listName) {
     const apiUrl = apiPrefix + `${state.boardId}/lists`
-    axios.post(apiUrl, {
-      uid: localStorage.getItem('uid'),
-      'access-token': localStorage.getItem('access-token'),
-      client: localStorage.getItem('client'),
-      name: listName
-    }).then((response) => {
+    const formData = rootState.login.initFormDataWithAuthToken
+    formData.append('list[name]', listName)
+    axios.post(apiUrl, formData).then((response) => {
       commit('newList', response.data)
     })
   },
-  async deleteList ({ commit, state }, id) {
+  async deleteList ({ commit, state, rootState }, id) {
     const apiUrl = apiPrefix + `${state.boardId}/lists`
     axios.delete(apiUrl + `/${id}`, {
-      headers: {
-        uid: localStorage.getItem('uid'),
-        'access-token': localStorage.getItem('access-token'),
-        client: localStorage.getItem('client')
+      headers: rootState.login.authHeader
+    }).then((response) => {
+      if (response.data.message === 'delete_ok') {
+        commit('removeList', id)
       }
     })
-
-    commit('removeList', id)
   },
-  async dragList ({ commit, state }, event) {
+  async dragList ({ commit, state, rootState }, event) {
     const position = event.moved.newIndex
-    let rawListsObj = null
-    if (isProxy(state.lists)) {
-      rawListsObj = toRaw(state.lists)
-    } else {
-      rawListsObj = state.lists
-    }
+    const rawListsObj = isProxy(state.lists) ? toRaw(state.lists) : state.lists
     const url = apiPrefix + `${state.boardId}/lists/${rawListsObj[position].id}/drag`
-    axios.put(url, {
-      uid: localStorage.getItem('uid'),
-      'access-token': localStorage.getItem('access-token'),
-      client: localStorage.getItem('client'),
-      position: event.moved.newIndex + 1
-    })
-
-    commit('setListPosition', position)
+    const formData = rootState.login.initFormDataWithAuthToken
+    formData.append('list[position]', event.moved.newIndex + 1)
+    axios.put(url, formData)
   },
-  async dragCard ({ commit, state }, { event, listId }) {
+  async dragCard ({ commit, state, rootState }, { event, listId }) {
     const cardEvent = event.added || event.moved
     if (cardEvent) {
       const cardId = cardEvent.element.id
       const url = apiPrefix + `${state.boardId}/cards/${cardId}/drag`
-      axios.put(url, {
-        uid: localStorage.getItem('uid'),
-        'access-token': localStorage.getItem('access-token'),
-        client: localStorage.getItem('client'),
-        list_id: listId,
-        position: cardEvent.newIndex + 1
-      }).then((response) => {
-        if (response.data.message === 'ok') {
-          const card = response.data.card
-          commit('setCardPosition', card)
-        }
-      })
+      const formData = rootState.login.initFormDataWithAuthToken
+      formData.append('card[position]', cardEvent.newIndex + 1)
+      formData.append('card[list_id]', listId)
+      axios.put(url, formData)
     }
   },
-  async addCard ({ commit, state }, { listId, cardName }) {
+  async addCard ({ commit, state, rootState }, { listId, cardName }) {
     const apiUrl = apiPrefix + `${state.boardId}/cards`
-    axios.post(apiUrl, {
-      uid: localStorage.getItem('uid'),
-      'access-token': localStorage.getItem('access-token'),
-      client: localStorage.getItem('client'),
-      list_id: listId,
-      name: cardName
-    }).then((response) => {
+    const formData = rootState.login.initFormDataWithAuthToken
+    formData.append('card[name]', cardName)
+    formData.append('card[list_id]', listId)
+    axios.post(apiUrl, formData).then((response) => {
       commit('newCard', response.data)
     })
   },
-  async deleteCard ({ commit, state }, card) {
+  async deleteCard ({ commit, state, rootState }, card) {
     const id = card.id
     const apiUrl = apiPrefix + `${state.boardId}/cards`
     axios.delete(apiUrl + `/${id}`, {
-      headers: {
-        uid: localStorage.getItem('uid'),
-        'access-token': localStorage.getItem('access-token'),
-        client: localStorage.getItem('client')
-      }
+      headers: rootState.login.authHeader
     }).then((response) => {
       const listId = card.list_id
       if (response.data.message === 'delete_ok') {
@@ -134,12 +100,6 @@ const mutations = {
   },
   removeList: (state, id) => {
     state.lists = state.lists.filter((list) => list.id !== id)
-  },
-  setListPosition: (idx) => {
-    console.log(idx)
-  },
-  setCardPosition: (response) => {
-    console.log(response)
   },
   newCard: (state, card) => {
     const index = state.lists.findIndex((list) => list.id === card.list_id)

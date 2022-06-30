@@ -8,12 +8,25 @@ const state = {
   uid: '',
   access_token: '',
   client: '',
-  isLogin: false
+  isLogin: false,
+  authHeader: {},
+  initFormDataWithAuthToken: null
 }
 
 const getters = {
   isLogin (state) {
     state.isLogin = (localStorage.getItem('uid') !== null)
+    if (state.isLogin) {
+      state.authHeader = {
+        uid: localStorage.getItem('uid'),
+        'access-token': localStorage.getItem('access-token'),
+        client: localStorage.getItem('client')
+      }
+      state.initFormDataWithAuthToken = new FormData()
+      state.initFormDataWithAuthToken.append('uid', localStorage.getItem('uid'))
+      state.initFormDataWithAuthToken.append('access-token', localStorage.getItem('access-token'))
+      state.initFormDataWithAuthToken.append('client', localStorage.getItem('client'))
+    }
     return state.isLogin
   },
   userEmail (state) {

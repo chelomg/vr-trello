@@ -4,7 +4,7 @@ class Api::V1::CardsController < ApplicationController
 
   # PUT /cards/:id/drag
   def drag
-    @card.update(position: params[:position], list_id: params[:list_id])
+    @card.update(position: card_params[:position], list_id: card_params[:list_id])
 
     render json: { message: 'ok', card: @card, board_id: params[:board_id]}
   end
