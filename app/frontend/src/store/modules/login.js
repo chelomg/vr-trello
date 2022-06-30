@@ -52,14 +52,9 @@ const actions = {
     })
     commit('setLoginData', response)
   },
-  async signout ({ commit }) {
+  async signout ({ commit, state }) {
     const response = await axios.delete(apiUrl + '/sign_out', {
-      test: { test: 'test' },
-      headers: {
-        uid: localStorage.getItem('uid'),
-        'access-token': localStorage.getItem('access-token'),
-        client: localStorage.getItem('client')
-      }
+      headers: state.authHeader
     })
     commit('deleteLoginData', response)
   }
