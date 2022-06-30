@@ -1,28 +1,15 @@
 class Api::V1::BoardsController < ApplicationController
   before_action :authenticate_api_v1_user!
-  before_action :set_board, only: %i[ show edit update destroy ]
+  before_action :set_board, only: %i[ update destroy ]
 
-  # GET /boards or /boards.json
+  # GET /boards
   def index
     boards = current_api_v1_user.boards
     user_id = current_api_v1_user.uid
     render json: { message: 'ok', boards: boards, user_id: user_id }
   end
 
-  # GET /boards/1 or /boards/1.json
-  def show
-  end
-
-  # GET /boards/new
-  def new
-    @board = current_user.Board.new
-  end
-
-  # GET /boards/1/edit
-  def edit
-  end
-
-  # POST /boards or /boards.json
+  # POST /boards
   def create
     @board = Board.new(name: board_params[:name], description: board_params[:description], user_id: current_api_v1_user.id)
     if @board.save
@@ -32,7 +19,7 @@ class Api::V1::BoardsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /boards/1 or /boards/1.json
+  # PATCH/PUT /boards/1
   def update
     respond_to do |format|
       if @board.update(board_params)
@@ -45,7 +32,7 @@ class Api::V1::BoardsController < ApplicationController
     end
   end
 
-  # DELETE /boards/1 or /boards/1.json
+  # DELETE /boards/1
   def destroy
     @board.destroy
 

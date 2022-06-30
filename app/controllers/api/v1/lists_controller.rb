@@ -2,7 +2,7 @@ class Api::V1::ListsController < ApplicationController
   before_action :authenticate_api_v1_user!
   before_action :set_list, only: %i[ show edit update destroy drag]
 
-  # GET /lists or /lists.json
+  # GET /lists
   def index
     board = Board.find(params[:board_id])
     lists_json = board.lists_json
@@ -16,7 +16,7 @@ class Api::V1::ListsController < ApplicationController
     render json: { message: 'ok', list: @list, board_id: params[:board_id]}
   end
 
-  # POST /lists or /lists.json
+  # POST /lists
   def create
     @list = List.new(name: list_params[:name], board_id: params[:board_id])
 
@@ -27,7 +27,7 @@ class Api::V1::ListsController < ApplicationController
     end
   end
 
-  # DELETE /lists/1 or /lists/1.json
+  # DELETE /lists/1
   def destroy
     @list.destroy
 

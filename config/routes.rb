@@ -3,13 +3,13 @@ Rails.application.routes.draw do
   namespace :api do 
     namespace :v1 do
       mount_devise_token_auth_for 'User', at: 'auth'
-      resources :boards do
-        resources :lists, except: [:new, :edit] do
+      resources :boards, except: [:new, :edit, :show] do
+        resources :lists, except: [:new, :edit, :show] do
           member do
             put :drag
           end
         end
-        resources :cards, except: [:new, :edit] do
+        resources :cards, except: [:new, :edit, :show, :index] do
           member do
             put :drag
           end
