@@ -1,8 +1,9 @@
 <template>
   <nav class="relative w-full flex flex-wrap items-center justify-between py-3 bg-gray-100 text-gray-500 hover:text-gray-700 focus:text-gray-700 shadow-lg">
     <div class="container-fluid w-full flex flex-wrap items-center justify-between px-6">
-      <a href="/" class="text-xl text-black font-semibold">
-        vr-trello
+      <a href="/" class="flex flex-wrap text-xl text-black font-semibold">
+        <img src="../assets/vrLogov1.png" style="height: 65px" alt="" loading="lazy" />
+        <span class="pl-2 pt-1 self-center text-xl font-semibold whitespace-nowrap dark:text-black">VRTrello</span>
       </a>
       <div>
         <a v-if="!isLogin" href="/login" type="button" class="user-button">登入</a>
