@@ -5,11 +5,11 @@
         <img src="../assets/vrLogov1.png" style="height: 65px" alt="" loading="lazy" />
         <span class="pl-2 pt-1 self-center text-xl font-semibold whitespace-nowrap dark:text-black">VRTrello</span>
       </a>
-      <div>
-        <a v-if="!isLogin" href="/login" type="button" class="user-button">登入</a>
-        <a v-if="!isLogin" href="/signup" type="button" class="user-button">註冊</a>
-        <p v-if="isLogin"> {{ userEmail }} </p>
-        <input v-if="isLogin" @click="signout" type="button" class="user-button" value="登出">
+      <div class="flex flex-wrap">
+        <a v-if="!isLogin" href="/login" type="button" class="mx-1 user-button">登入</a>
+        <a v-if="!isLogin" href="/signup" type="button" class="mx-1 user-button">註冊</a>
+        <p v-if="isLogin" class="mx-1"> {{ userEmail }} </p>
+        <input v-if="isLogin" @click="signout" type="button" class="mx-1 user-button" value="登出">
       </div>
     </div>
   </nav>
