@@ -50,11 +50,7 @@ export default {
   methods: {
     fetchBoards () {
       axios.get(apiUrl, {
-        headers: {
-          uid: localStorage.getItem('uid'),
-          'access-token': localStorage.getItem('access-token'),
-          client: localStorage.getItem('client')
-        }
+        headers: this.$store.state.login.authHeader
       }).then((response) => {
         if (response.data.message === 'ok') {
           this.boards = response.data.boards
@@ -63,13 +59,10 @@ export default {
     },
     onSubmit (event) {
       event.preventDefault()
-      axios.post(apiUrl, {
-        uid: localStorage.getItem('uid'),
-        'access-token': localStorage.getItem('access-token'),
-        client: localStorage.getItem('client'),
-        name: this.name,
-        description: this.description
-      }).then((response) => {
+      const formData = this.$store.state.login.initFormDataWithAuthToken
+      formData.append('board[name]', this.name)
+      formData.append('board[description]', this.description)
+      axios.post(apiUrl, formData).then((response) => {
         const board = response.data
         this.boards.unshift(board)
       })
@@ -78,11 +71,7 @@ export default {
     },
     deleteBoard (id) {
       axios.delete(apiUrl + `/${id}`, {
-        headers: {
-          uid: localStorage.getItem('uid'),
-          'access-token': localStorage.getItem('access-token'),
-          client: localStorage.getItem('client')
-        }
+        headers: this.$store.state.login.authHeader
       })
       this.boards = this.boards.filter((board) => board.id !== id)
     }
