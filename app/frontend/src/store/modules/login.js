@@ -37,8 +37,6 @@ const getters = {
 
 const actions = {
   async signup ({ commit }, signupData) {
-    console.log(signupData.password)
-    console.log(signupData.passwordConfirmation)
     const response = await axios.post(apiUrl, {
       email: signupData.email,
       password: signupData.password,
