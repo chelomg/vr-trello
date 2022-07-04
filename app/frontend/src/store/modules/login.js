@@ -4,7 +4,7 @@ const apiUrl = 'http://localhost:3000/api/v1/auth'
 const state = {
   email: '',
   password: '',
-  passwordComfirmation: '',
+  passwordConfirmation: '',
   uid: '',
   access_token: '',
   client: '',
@@ -37,10 +37,12 @@ const getters = {
 
 const actions = {
   async signup ({ commit }, signupData) {
+    console.log(signupData.password)
+    console.log(signupData.passwordConfirmation)
     const response = await axios.post(apiUrl, {
       email: signupData.email,
       password: signupData.password,
-      password_comfirmation: signupData.passwordComfirmation
+      password_confirmation: signupData.passwordConfirmation
     })
     commit('setLoginData', response)
   },
@@ -48,7 +50,7 @@ const actions = {
     const response = await axios.post(apiUrl + '/sign_in', {
       email: signinData.email,
       password: signinData.password,
-      password_comfirmation: signinData.passwordComfirmation
+      password_confirmation: signinData.passwordConfirmation
     })
     commit('setLoginData', response)
   },

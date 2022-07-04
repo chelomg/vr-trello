@@ -73,7 +73,7 @@ export default {
     },
     removeUserData () {
       this.password = ''
-      this.passwordComfirmation = ''
+      this.passwordConfirmation = ''
       this.email = ''
     },
     jumpToSignup ($event) {
