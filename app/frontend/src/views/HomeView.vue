@@ -32,7 +32,8 @@
 <script>
 import { mapGetters } from 'vuex'
 import axios from 'axios'
-const apiUrl = 'http://localhost:3000/api/v1/boards'
+const rootPath = (process.env.NODE_ENV === 'development') ? 'http://localhost:3000' : ''
+const apiUrl = rootPath + '/api/v1/boards'
 
 export default {
   name: 'HomeView',

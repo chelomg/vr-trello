@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { isProxy, toRaw } from 'vue'
-const apiPrefix = 'http://localhost:3000/api/v1/boards/'
+const rootPath = (process.env.NODE_ENV === 'development') ? 'http://localhost:3000' : ''
+const apiPrefix = rootPath + '/api/v1/boards/'
 
 const state = {
   boardId: null,

@@ -1,5 +1,6 @@
 import axios from 'axios'
-const apiUrl = '/api/v1/auth'
+const rootPath = (process.env.NODE_ENV === 'development') ? 'http://localhost:3000' : ''
+const apiUrl = rootPath + '/api/v1/auth'
 
 const state = {
   email: '',
