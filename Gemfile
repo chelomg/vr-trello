@@ -40,6 +40,9 @@ group :development, :test do
 end
 
 group :production do
+  gem 'capistrano', '~> 3.10', require: false
+  gem "capistrano-rails", "~> 1.6", require: false
+  gem "capistrano-passenger"
   gem 'pg'
 end
 
