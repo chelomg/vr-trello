@@ -43,7 +43,7 @@ group :production do
   gem 'capistrano', '~> 3.10', require: false
   gem "capistrano-rails", "~> 1.6", require: false
   gem "capistrano-passenger"
-  gem 'pg'
+  gem 'pg', '~> 0.20.0'
 end
 
 group :development do
