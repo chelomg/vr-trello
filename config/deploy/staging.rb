@@ -64,5 +64,5 @@ set :deploy_to, '/home/deploy/staging'
 set :rails_env, 'production'
 set :default_env, { 
   PATH: '$HOME/.npm-packages/bin/:$PATH',
-  NODE_ENVIRONMENT: 'production'
+  NODE_ENVIRONMENT: 'staging'
 }
