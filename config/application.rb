@@ -18,5 +18,10 @@ module VrTrello
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    def secret_key_base
+      if Rails.env.production?
+        validate_secret_key_base(secrets.secret_key_base)
+      end
+    end
   end
 end
