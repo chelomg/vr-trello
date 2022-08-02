@@ -275,7 +275,7 @@ DEPENDENCIES
   devise_token_auth
   jbuilder (~> 2.7)
   listen (~> 3.3)
-  pg (~> 0.20.0)
+  pg
   puma (~> 5.0)
   rack-cors
   rack-mini-profiler (~> 2.0)
