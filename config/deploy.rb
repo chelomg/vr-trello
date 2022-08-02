@@ -32,8 +32,7 @@ append :linked_dirs, 'log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'node_module
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
 set :default_env, { 
-  path: '/usr/local/ruby-2.6.5/bin:$PATH',
-  NODE_ENVIRONMENT: 'production'
+  path: '/usr/local/ruby-2.6.5/bin:$PATH'
 }
 
 # Default value for local_user is ENV['USER']
