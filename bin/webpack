@@ -4,5 +4,5 @@ ENV["RAILS_ENV"] ||= "development"
 
 APP_ROOT = File.expand_path("..", __dir__)
 Dir.chdir(APP_ROOT) do
-  Kernel.exec(ENV, "yarn build")
+  Kernel.exec(ENV, "yarn build:production")
 end
