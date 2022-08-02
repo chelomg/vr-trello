@@ -62,7 +62,3 @@
 server '159.223.80.250', user: 'deploy', roles: %w{app web db}
 set :deploy_to, '/home/deploy/staging'
 set :rails_env, 'production'
-set :default_env, { 
-  PATH: '$HOME/.npm-packages/bin/:$PATH',
-  NODE_ENVIRONMENT: 'staging'
-}
