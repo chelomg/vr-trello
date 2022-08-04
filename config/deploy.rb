@@ -23,7 +23,7 @@ set :branch, "main"
 
 # Default value for :linked_files is []
 # append :linked_files, "config/database.yml", 'config/master.key'
-append :linked_files, 'config/database.yml', 'config/secrets.yml'
+append :linked_files, 'config/database.yml', 'config/secrets.yml', '.env'
 
 # Default value for linked_dirs is []
 # append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "tmp/webpacker", "public/system", "vendor", "storage"
@@ -44,3 +44,7 @@ set :default_env, {
 # Uncomment the following to require manually verifying the host key before first deploy.
 # set :ssh_options, verify_host_key: :secure
 set :passenger_restart_with_touch, true
+
+# TODO: need to add a condition to control this setting
+after :deploy, 'deploy:build_js_plugin'
+after :deploy, 'deploy:assets_precompile'

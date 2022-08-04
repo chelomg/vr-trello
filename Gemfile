@@ -29,6 +29,7 @@ gem 'devise_token_auth'
 gem 'rack-cors'
 gem 'active_model_serializers'
 gem 'acts_as_list'
+gem 'dotenv-rails'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.4', require: false

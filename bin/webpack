@@ -1,8 +1,10 @@
 #!/usr/bin/env ruby
 
-ENV["RAILS_ENV"] ||= "development"
+ENV["NODE_ENV"] ||= "development"
+ENV["SPV"] ||= "not digitalocean"
 
 APP_ROOT = File.expand_path("..", __dir__)
 Dir.chdir(APP_ROOT) do
+  if ENV["SPV"] == "digitalocean" then Kernel.exec(ENV, "yarn build:digitalocean") end
   Kernel.exec(ENV, "yarn build")
 end
