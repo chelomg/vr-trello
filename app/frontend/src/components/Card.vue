@@ -19,10 +19,10 @@ export default {
     ...mapActions(['deleteCard']),
     linkify (inputText) {
       const pattern1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim
-      let text = inputText.replace(pattern1, '<a href="$1" target="_blank">$1</a>')
+      let text = inputText.replace(pattern1, '<a href="$1" class="text-blue-500 underline" target="_blank">$1</a>')
 
       const pattern2 = /(^|[^/])(www\.[\S]+(\b|$))/gim
-      text = text.replace(pattern2, '$1<a href="http://$2" target="_blank">$2</a>')
+      text = text.replace(pattern2, '$1<a href="http://$2" class="text-blue-500 underline" target="_blank">$2</a>')
       return text
     }
   }
