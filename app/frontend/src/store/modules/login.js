@@ -54,10 +54,11 @@ const actions = {
     commit('setLoginData', response)
   },
   async signout ({ commit, state }) {
-    const response = await axios.delete(apiUrl + '/sign_out', {
+    // TODO: need to redesign when token expired
+    commit('deleteLoginData')
+    await axios.delete(apiUrl + '/sign_out', {
       headers: state.authHeader
     })
-    commit('deleteLoginData', response)
   }
 }
 
