@@ -31,7 +31,7 @@ class Api::V1::ListsController < ApplicationController
   def destroy
     @list.destroy
 
-    render json: {message: 'delete_ok'}
+    render json: {message: 'delete_ok'}, status: :no_content
   end
 
   private
