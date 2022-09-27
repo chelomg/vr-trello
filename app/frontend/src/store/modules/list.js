@@ -39,7 +39,7 @@ const actions = {
     axios.delete(apiUrl + `/${id}`, {
       headers: rootState.login.authHeader
     }).then((response) => {
-      if (response.data.message === 'delete_ok') {
+      if (response.status === 204) {
         commit('removeList', id)
       }
     })
@@ -79,7 +79,7 @@ const actions = {
       headers: rootState.login.authHeader
     }).then((response) => {
       const listId = card.list_id
-      if (response.data.message === 'delete_ok') {
+      if (response.status === 204) {
         commit('removeCard', { listId, id })
       }
     })

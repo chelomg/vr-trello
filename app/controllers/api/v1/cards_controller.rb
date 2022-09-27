@@ -24,6 +24,7 @@ class Api::V1::CardsController < ApplicationController
   def destroy
     @card.destroy
 
+    # TODO: no content means do not set delete message
     render json: { message: 'delete_ok' }, status: :no_content
   end
 

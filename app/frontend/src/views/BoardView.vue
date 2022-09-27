@@ -4,7 +4,7 @@
 
     <template #item="{element}">
       <div class="block p-6 rounded-lg shadow-lg bg-white max-w-sm">
-        <i @click="deleteList(element.id)" class="flex flex-row-reverse">X</i>
+        <i @click="DeleteList(element.id)" class="flex flex-row-reverse">X</i>
         <h5 class="text-gray-900 text-xl leading-tight font-medium mb-2">{{ element.name }}</h5>
         <p class="text-gray-700 text-base mb-4">
           {{ element.description }}
@@ -61,6 +61,11 @@ export default {
         this.addList(this.name)
       }
       this.name = ''
+    },
+    DeleteList (id) {
+      if (confirm('Are you sure?')) {
+        this.deleteList(id)
+      }
     }
   },
   created () {
